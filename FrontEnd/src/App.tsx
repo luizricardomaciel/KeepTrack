@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/App.tsx
+import { Routes, Route, Navigate, Link as RouterLink } from 'react-router-dom';
+import { Container, CssBaseline, Box, Typography, Button, CircularProgress } from '@mui/material';
+import Header from './components/layout/Header';
+import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
+import { useAuth } from './hooks/useAuth'; // Import useAuth to handle initial loading state
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const { isLoading: authLoading } = useAuth();
+
+  // Display a global loader if initial auth check is in progress
+  // This prevents content flashing or incorrect redirects before auth state is known
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+      <Container component="main" sx={{ mt: 2, mb: 2, py: 2 }}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          {/* Example of a protected route - can be wrapped in a <ProtectedRoute> component later */}
+          {/* <Route path="/assets" element={isAuthenticated ? <AssetsPage /> : <Navigate to="/login" />} /> */}
+          <Route path="*" element={
+            <Box sx={{ textAlign: 'center', mt: 4 }}>
+              <Typography variant="h4">404 - Page Not Found</Typography>
+              <Button component={RouterLink} to="/home" variant="contained" sx={{ mt: 2 }}>
+                Go Home
+              </Button>
+            </Box>
+          } />
+        </Routes>
+      </Container>
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <>
+      <CssBaseline /> {/* MUI helper for consistent baseline styles */}
+      <AppContent />
+    </>
+  );
+}
+
+export default App;
