@@ -1,10 +1,10 @@
-// C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/App.tsx
 import { Routes, Route, Navigate, Link as RouterLink } from 'react-router-dom';
 import { Container, CssBaseline, Box, Typography, Button, CircularProgress } from '@mui/material';
 import Header from './components/layout/Header';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import { useAuth } from './hooks/useAuth'; // Import useAuth to handle initial loading state
+import AssetDetailPage from './pages/AssetDetailPage'; // <-- Import the new page
+import { useAuth } from './hooks/useAuth';
 
 function AppContent() {
   const { isLoading: authLoading } = useAuth();
@@ -27,8 +27,7 @@ function AppContent() {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          {/* Example of a protected route - can be wrapped in a <ProtectedRoute> component later */}
-          {/* <Route path="/assets" element={isAuthenticated ? <AssetsPage /> : <Navigate to="/login" />} /> */}
+          <Route path="/assets/:assetId" element={<AssetDetailPage />} />
           <Route path="*" element={
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="h4">404 - Page Not Found</Typography>

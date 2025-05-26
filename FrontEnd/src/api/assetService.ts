@@ -57,3 +57,15 @@ export async function deleteAssetAPI(assetId: number, token: string): Promise<{ 
   }
   return response.json();
 }
+
+export async function fetchAssetById(assetId: number, token: string): Promise<Asset> {
+  const response = await fetch(`${API_BASE_URL}/assets/${assetId}`, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to fetch asset details');
+  }
+  return response.json();
+}

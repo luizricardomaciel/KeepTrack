@@ -6,6 +6,7 @@ import {
   Typography, Container, Box, Paper, Button, List, ListItem, ListItemText, ListItemSecondaryAction,
   IconButton, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, Card, CardContent, CardActions, Divider
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -189,10 +190,22 @@ const HomePage: React.FC = () => {
             <img src={iconNoAssets} alt="No assets" style={{ maxHeight: 150, opacity: 0.7 }}/>
           </Paper>
         ) : (
-          <Grid container spacing={3}>
+         <Grid container spacing={3}>
             {assets.map((asset) => (
-              <Grid component="div" item xs={12} sm={6} md={4} key={asset.id}>
-                <Card elevation={2} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Grid key={asset.id}>
+                <Card 
+                  elevation={2} 
+                  sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    height: '100%',
+                    '&:hover': {
+                        boxShadow: 6, // or other hover effect
+                        cursor: 'pointer'
+                    }
+                  }}
+                  onClick={() => navigate(`/assets/${asset.id}`)} // Navigate on click
+                >
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h6" component="div" gutterBottom>
                       {asset.name}
@@ -202,13 +215,23 @@ const HomePage: React.FC = () => {
                     </Typography>
                   </CardContent>
                   <Divider />
-                  <CardActions sx={{ justifyContent: 'flex-end', p:1 }}>
-                    <IconButton aria-label="edit" onClick={() => handleOpenEditModal(asset)} color="primary" size="small">
-                      <EditIcon fontSize="small"/>
-                    </IconButton>
-                    <IconButton aria-label="delete" onClick={() => handleOpenDeleteDialog(asset)} color="error" size="small">
-                      <DeleteIcon fontSize="small"/>
-                    </IconButton>
+                  <CardActions sx={{ justifyContent: 'space-between', p:1 }}> {/* Changed justifyContent */}
+                    <Button 
+                        component={RouterLink} 
+                        to={`/assets/${asset.id}`} 
+                        size="small"
+                        color="primary"
+                    >
+                        View Details
+                    </Button>
+                    <Box> {/* Wrapper for action buttons */}
+                        <IconButton aria-label="edit" onClick={(e) => {e.stopPropagation(); handleOpenEditModal(asset);}} color="primary" size="small">
+                            <EditIcon fontSize="small"/>
+                        </IconButton>
+                        <IconButton aria-label="delete" onClick={(e) => {e.stopPropagation(); handleOpenDeleteDialog(asset);}} color="error" size="small">
+                            <DeleteIcon fontSize="small"/>
+                        </IconButton>
+                    </Box>
                   </CardActions>
                 </Card>
               </Grid>

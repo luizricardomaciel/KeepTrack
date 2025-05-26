@@ -79,18 +79,43 @@ export class MaintenanceRecordRepository {
     recordData: Omit<UpdateMaintenanceRecordRequest, 'service_date' | 'next_maintenance_date'> &
                 { service_date?: Date; next_maintenance_date?: Date | null }
   ): Promise<MaintenanceRecord | null> {
-    // Filtrar apenas os campos que foram fornecidos para atualização
-    const updates: Partial<typeof recordData> = {};
+    // Define a type for the payload that will be used to build the SET clause.
+    // Date fields are represented as 'YYYY-MM-DD' strings or null.
+    type UpdateDbPayload = {
+      service_type?: string;
+      service_date?: string;
+      description?: string;
+      cost?: number;
+      performed_by?: string;
+      next_maintenance_date?: string | null;
+      next_maintenance_notes?: string;
+    };
+
+    const updates: UpdateDbPayload = {};
+
     if (recordData.service_type !== undefined) updates.service_type = recordData.service_type;
-    if (recordData.service_date !== undefined) updates.service_date = recordData.service_date;
+    
+    if (recordData.service_date !== undefined) {
+      // Convert Date to YYYY-MM-DD string in UTC
+      updates.service_date = recordData.service_date.toISOString().split('T')[0];
+    }
+    
     if (recordData.description !== undefined) updates.description = recordData.description;
     if (recordData.cost !== undefined) updates.cost = recordData.cost;
     if (recordData.performed_by !== undefined) updates.performed_by = recordData.performed_by;
-    if (recordData.next_maintenance_date !== undefined) updates.next_maintenance_date = recordData.next_maintenance_date;
+    
+    if (recordData.next_maintenance_date !== undefined) {
+      if (recordData.next_maintenance_date === null) {
+        updates.next_maintenance_date = null;
+      } else {
+        // Convert Date to YYYY-MM-DD string in UTC
+        updates.next_maintenance_date = recordData.next_maintenance_date.toISOString().split('T')[0];
+      }
+    }
+    
     if (recordData.next_maintenance_notes !== undefined) updates.next_maintenance_notes = recordData.next_maintenance_notes;
 
-
-    const fields = Object.keys(updates) as (keyof typeof updates)[];
+    const fields = Object.keys(updates) as (keyof UpdateDbPayload)[];
     const values = fields.map((field) => updates[field]);
 
     if (fields.length === 0) {
