@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, CircularProgress, Box } from '@mui/material';
+import { Link as RouterLink} from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, CircularProgress} from '@mui/material';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -22,12 +22,6 @@ const Header: React.FC = () => {
     handleClose();
   };
 
-  const handleProfile = () => {
-    // Navigate to a profile page if you have one
-    // navigate('/profile');
-    handleClose();
-  };
-  
   const getInitials = (name: string | undefined) => {
     if (!name) return '';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();

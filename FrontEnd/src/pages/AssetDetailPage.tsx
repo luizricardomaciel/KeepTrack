@@ -10,7 +10,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EventNoteIcon from '@mui/icons-material/EventNote'; // For service date
 import UpdateIcon from '@mui/icons-material/Update'; // For next maintenance date
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // For cost
 import PersonIcon from '@mui/icons-material/Person'; // For performed by
@@ -72,7 +71,7 @@ const formatDate = (dateString: string | null | undefined, includeTime = false, 
 const AssetDetailPage: React.FC = () => {
   const { assetId } = useParams<AssetDetailParams>();
   const navigate = useNavigate();
-  const { user, token, isAuthenticated, isLoading: authIsLoading, logout } = useAuth();
+  const { token, isAuthenticated, isLoading: authIsLoading, logout } = useAuth();
 
   const [asset, setAsset] = useState<Asset | null>(null);
   const [maintenanceRecords, setMaintenanceRecords] = useState<MaintenanceRecord[]>([]);

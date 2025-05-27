@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
-  Typography, Container, Box, Paper, Button, List, ListItem, ListItemText, ListItemSecondaryAction,
+  Typography, Container, Box, Paper, Button,
   IconButton, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, Card, CardContent, CardActions, Divider
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
