@@ -1,20 +1,20 @@
 import { Routes, Route, Navigate, Link as RouterLink } from 'react-router-dom';
 import { Container, CssBaseline, Box, Typography, Button, CircularProgress } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles'; // Added
+import { darkTheme } from './components/ThemeUi/DarckTheme'; 
 import Header from './components/layout/Header';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import AssetDetailPage from './pages/AssetDetailPage'; // <-- Import the new page
+import AssetDetailPage from './pages/AssetDetailPage';
 import { useAuth } from './hooks/useAuth';
 
 function AppContent() {
   const { isLoading: authLoading } = useAuth();
 
-  // Display a global loader if initial auth check is in progress
-  // This prevents content flashing or incorrect redirects before auth state is known
   if (authLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', bgcolor: darkTheme.palette.background.default }}>
+        <CircularProgress color="primary"/>
       </Box>
     );
   }
@@ -31,7 +31,7 @@ function AppContent() {
           <Route path="*" element={
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="h4">404 - Page Not Found</Typography>
-              <Button component={RouterLink} to="/home" variant="contained" sx={{ mt: 2 }}>
+              <Button component={RouterLink} to="/home" variant="contained" color="primary" sx={{ mt: 2 }}>
                 Go Home
               </Button>
             </Box>
@@ -44,10 +44,10 @@ function AppContent() {
 
 function App() {
   return (
-    <>
-      <CssBaseline /> {/* MUI helper for consistent baseline styles */}
+    <ThemeProvider theme={darkTheme}> {/* Apply the theme */}
+      <CssBaseline /> {/* MUI helper for consistent baseline styles, enables dark mode for body etc. */}
       <AppContent />
-    </>
+    </ThemeProvider>
   );
 }
 

@@ -137,8 +137,8 @@ const HomePage: React.FC = () => {
   if (authIsLoading) {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-        <CircularProgress />
-        <Typography sx={{ ml: 2 }}>Loading user data...</Typography>
+        <CircularProgress color="primary" />
+        <Typography sx={{ ml: 2, color: 'text.secondary' }}>Loading user data...</Typography>
       </Container>
     );
   }
@@ -150,24 +150,24 @@ const HomePage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ my: 4 }}>
-        <Paper elevation={3} sx={{ p: 3, mb: 3, background: 'linear-gradient(to right, #e3f2fd, #bbdefb)' }}>
-          <Typography variant="h4" component="h1" gutterBottom>
+        <Paper elevation={3} sx={{ p: 3, mb: 3, backgroundColor: 'background.paper' /* Using theme's paper color */ }}>
+          <Typography variant="h4" component="h1" gutterBottom color="text.primary">
             Welcome, {user.name}!
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" color="text.primary">
             This is your asset management dashboard. Keep track of your valuable items and their maintenance schedules.
           </Typography>
         </Paper>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" component="h2">
+          <Typography variant="h5" component="h2" color="text.primary">
             Your Assets
           </Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleOpenCreateModal}
-            color="primary"
+            color="primary" // This will use theme.palette.primary.main and .contrastText
           >
             Add New Asset
           </Button>
@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
 
         {isLoadingAssets ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
-            <CircularProgress size={50}/>
+            <CircularProgress size={50} color="primary"/>
           </Box>
         ) : assets.length === 0 && !pageError ? (
           <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
@@ -199,28 +199,30 @@ const HomePage: React.FC = () => {
                     display: 'flex', 
                     flexDirection: 'column', 
                     height: '100%',
+                    transition: 'box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out', // Added transition
                     '&:hover': {
-                        boxShadow: 6, // or other hover effect
+                        boxShadow: '0px 10px 20px rgba(190, 242, 100, 0.2)', // Primary color shadow
+                        transform: 'translateY(-4px)', // Lift effect
                         cursor: 'pointer'
                     }
                   }}
                   onClick={() => navigate(`/assets/${asset.id}`)} // Navigate on click
                 >
                   <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography variant="h6" component="div" gutterBottom>
+                    <Typography variant="h6" component="div" gutterBottom color="text.primary">
                       {asset.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ minHeight: '3em', overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
                       {asset.description || 'No description provided.'}
                     </Typography>
                   </CardContent>
-                  <Divider />
+                  <Divider /> {/* Divider will use theme.palette.divider */}
                   <CardActions sx={{ justifyContent: 'space-between', p:1 }}> {/* Changed justifyContent */}
                     <Button 
                         component={RouterLink} 
                         to={`/assets/${asset.id}`} 
                         size="small"
-                        color="primary"
+                        color="primary" // Text color will be primary.main
                     >
                         View Details
                     </Button>
@@ -256,9 +258,9 @@ const HomePage: React.FC = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogTitle id="alert-dialog-title" color="text.primary">Confirm Deletion</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="alert-dialog-description" color="text.secondary">
             Are you sure you want to delete the asset "{assetToDelete?.name}"? This action cannot be undone.
             All associated maintenance records will also be deleted.
           </DialogContentText>

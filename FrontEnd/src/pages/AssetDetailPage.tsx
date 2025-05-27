@@ -1,9 +1,10 @@
+// C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/pages/AssetDetailPage.tsx
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
   Container, Typography, Box, Paper, CircularProgress, Alert, Button, Grid,
-  List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Divider, Card, CardContent, CardHeader, Tooltip
+   IconButton,  Card, CardContent, CardHeader, Tooltip
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EventNoteIcon from '@mui/icons-material/EventNote'; // For service date
 import UpdateIcon from '@mui/icons-material/Update'; // For next maintenance date
-import ConstructionIcon from '@mui/icons-material/Construction'; // For service type
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // For cost
 import PersonIcon from '@mui/icons-material/Person'; // For performed by
 
@@ -24,18 +24,24 @@ import {
 } from '../api/maintenanceRecordService';
 import MaintenanceRecordForm from '../components/MaintenanceRecordForm';
 import ConfirmDialog from '../components/common/ConfirmDialog'; // We'll create this small utility
+// import { da } from 'date-fns/locale'; // Unused import
 
 interface AssetDetailParams extends Record<string, string | undefined> {
   assetId: string;
 }
 
 // Helper to format date string
-const formatDate = (dateString: string | null | undefined, includeTime = false): string => {
+const formatDate = (dateString: string | null | undefined, includeTime = false, includeUTC = false): string => {
   if (!dateString) return 'N/A';
   
   try {
-    // Converter para UTC para evitar deslocamentos inesperados
-    const date = new Date(dateString + "T00:00:00Z"); // Força UTC para evitar erro de fuso horário
+    const date = !includeUTC 
+      ? new Date(dateString + 'T00:00:00Z') 
+      : new Date(dateString);
+
+      const isoDate = date.toISOString();
+      const isoDateWithoutTime = isoDate.split('T')[0];
+
     if (isNaN(date.getTime())) return 'Invalid Date';
 
     const options: Intl.DateTimeFormatOptions = {
@@ -45,10 +51,19 @@ const formatDate = (dateString: string | null | undefined, includeTime = false):
     if (includeTime) {
       options.hour = '2-digit';
       options.minute = '2-digit';
-      options.hour12 = false; // Formato 24h
+      options.hour12 = false; 
     }
+    
+    // For displaying date and time, use toLocaleString for browser's locale formatting.
+    // For just date, isoDateWithoutTime is usually fine.
+    if (includeTime) {
+         return date.toLocaleString('en-CA', { // en-CA gives YYYY-MM-DD HH:MM:SS format
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).replace(',', ''); // Remove comma sometimes inserted by toLocaleString
+    }
+    return isoDateWithoutTime;
 
-    return  date.toLocaleDateString("us-US", options);
   } catch (e) {
     return dateString; // fallback
   }
@@ -174,7 +189,8 @@ const AssetDetailPage: React.FC = () => {
       await deleteMaintenanceRecordAPI(recordToDelete.id, token);
       await loadAssetDetailsAndRecords(); // Reload records
       handleCloseDeleteRecordDialog();
-    } catch (error) {
+    } catch (error)
+ {
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete maintenance record.';
       setPageError(errorMessage); // Show error on the page
     } finally {
@@ -185,7 +201,7 @@ const AssetDetailPage: React.FC = () => {
   if (authIsLoading || isLoadingPage) {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-        <CircularProgress />
+        <CircularProgress color="primary" />
       </Container>
     );
   }
@@ -194,7 +210,7 @@ const AssetDetailPage: React.FC = () => {
     return (
       <Container>
         <Alert severity="error" sx={{ mt: 2 }}>{pageError}</Alert>
-        <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mt: 2 }}>
+        <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mt: 2 }} color="primary">
           Back to Home
         </Button>
       </Container>
@@ -204,8 +220,8 @@ const AssetDetailPage: React.FC = () => {
   if (!asset) {
      return (
       <Container>
-        <Typography sx={{mt:2}}>Asset not found or an error occurred.</Typography>
-         <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mt: 2 }}>
+        <Typography sx={{mt:2}} color="text.secondary">Asset not found or an error occurred.</Typography>
+         <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mt: 2 }} color="primary">
           Back to Home
         </Button>
       </Container>
@@ -214,24 +230,24 @@ const AssetDetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }}>
+      <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }} color="inherit">
         Back to Assets
       </Button>
 
       <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>{asset.name}</Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+        <Typography variant="h4" component="h1" gutterBottom color="text.primary">{asset.name}</Typography>
+        <Typography variant="body1" color="text.primary" sx={{ mb: 1 }}>
           {asset.description || 'No description provided.'}
         </Typography>
         <Typography variant="caption" display="block" color="text.secondary">
-            Created: {formatDate(asset.created_at, true)} | Last Updated: {formatDate(asset.updated_at, true)}
+            Created: {formatDate(asset.created_at, true, true)} | Last Updated: {formatDate(asset.updated_at, true, true)}
         </Typography>
       </Paper>
 
       {pageError && <Alert severity="error" sx={{ mb: 2 }}>{pageError}</Alert>}
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" component="h2">Maintenance History</Typography>
+        <Typography variant="h5" component="h2" color="text.primary">Maintenance History</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -243,7 +259,7 @@ const AssetDetailPage: React.FC = () => {
       </Box>
 
       {maintenanceRecords.length === 0 ? (
-        <Paper elevation={1} sx={{ p: 3, textAlign: 'center', backgroundColor: 'grey.50' }}>
+        <Paper elevation={1} sx={{ p: 3, textAlign: 'center' /* Removed backgroundColor: 'grey.50' */ }}>
           <Typography variant="subtitle1" color="text.secondary">
             No maintenance records found for this asset.
           </Typography>
@@ -251,9 +267,11 @@ const AssetDetailPage: React.FC = () => {
       ) : (
         <Grid container spacing={3}>
           {maintenanceRecords.map((record) => (
-            <Grid  key={record.id}>
-              <Card elevation={2}>
+            <Grid  key={record.id}> {/* Ensure Grid item takes space */}
+              <Card elevation={2} sx={{height: '100%'}}> {/* Ensure cards take full height of grid item if desired */}
                 <CardHeader
+                  titleTypographyProps={{color: "text.primary"}}
+                  subheaderTypographyProps={{color: "text.secondary"}}
                   title={record.service_type}
                   subheader={`Service Date: ${formatDate(record.service_date)}`}
                   action={
@@ -274,7 +292,7 @@ const AssetDetailPage: React.FC = () => {
                 />
                 <CardContent sx={{pt:1}}>
                   {record.description && (
-                    <Typography variant="body2" sx={{ mb: 1 }}>
+                    <Typography variant="body2" sx={{ mb: 1 }} color="text.primary">
                       <strong>Description:</strong> {record.description}
                     </Typography>
                   )}
@@ -290,18 +308,18 @@ const AssetDetailPage: React.FC = () => {
                       </Grid>
                     )}
                     {record.next_maintenance_date && (
-                      <Grid  sx={{display: 'flex', alignItems: 'center'}}>
+                      <Grid sx={{display: 'flex', alignItems: 'center'}}> {/* Ensure full width for this item */}
                          <UpdateIcon fontSize="inherit" sx={{mr:0.5}}/> <strong>Next Due:</strong> {formatDate(record.next_maintenance_date)}
                       </Grid>
                     )}
                     {record.next_maintenance_date && record.next_maintenance_notes && (
-                       <Grid  sx={{pl: '24px !important'}}> 
-                           <Typography variant="caption" component="div">Notes: {record.next_maintenance_notes}</Typography>
+                       <Grid sx={{pl: {xs:0, sm:'24px !important'}, mt:0.5 }}> {/* Adjust padding for notes */}
+                           <Typography variant="caption" component="div" color="text.secondary">Notes: {record.next_maintenance_notes}</Typography>
                        </Grid>
                     )}
                   </Grid>
                   <Typography variant="caption" display="block" color="text.disabled" sx={{mt:1, textAlign:'right'}}>
-                    Recorded: {formatDate(record.created_at, true)}
+                    Recorded: {formatDate(record.created_at, true, true)} {/* Ensure UTC used for consistency */}
                   </Typography>
                 </CardContent>
               </Card>

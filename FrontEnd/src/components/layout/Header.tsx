@@ -1,7 +1,6 @@
-// C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/components/layout/Header.tsx
 import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, CircularProgress } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, CircularProgress, Box } from '@mui/material';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -39,7 +38,7 @@ const Header: React.FC = () => {
       <Toolbar>
         <IconButton
           edge="start"
-          color="inherit"
+          color="inherit" // Will inherit color from AppBar (typically text.primary)
           aria-label="logo"
           component={RouterLink}
           to="/home"
@@ -47,12 +46,12 @@ const Header: React.FC = () => {
         >
           <TrackChangesIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'text.primary' }}>
           KeepTrack
         </Typography>
 
         {isLoading ? (
-          <CircularProgress color="inherit" size={24} />
+          <CircularProgress color="inherit" size={24} /> // Inherits AppBar's text color
         ) : isAuthenticated && user ? (
           <>
             <Button color="inherit" component={RouterLink} to="/home">
@@ -66,9 +65,15 @@ const Header: React.FC = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleMenu}
-              color="inherit"
+              color="inherit" // Icon color
             >
-              <Avatar sx={{ bgcolor: 'secondary.main', width: 32, height: 32, fontSize: '0.875rem' }}>
+              <Avatar sx={{ 
+                  bgcolor: 'secondary.main', // Uses theme.palette.secondary.main
+                  color: 'secondary.contrastText', // Uses theme.palette.secondary.contrastText
+                  width: 32, 
+                  height: 32, 
+                  fontSize: '0.875rem' 
+                }}>
                 {getInitials(user.name)}
               </Avatar>
             </IconButton>
@@ -87,15 +92,20 @@ const Header: React.FC = () => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
               sx={{ mt: '45px' }}
+              PaperProps={{
+                sx: {
+                  bgcolor: 'background.paper', // Ensure menu paper uses dark theme
+                },
+              }}
             >
-              <MenuItem disabled>
-                <Typography variant="subtitle2">{user.name}</Typography>
+              <MenuItem disabled sx={{opacity: 0.7}}>
+                <Typography variant="subtitle2" color="text.primary">{user.name}</Typography>
               </MenuItem>
-              <MenuItem disabled>
-                <Typography variant="caption">{user.email}</Typography>
+              <MenuItem disabled sx={{opacity: 0.7, mt: -1 /* reduce space */}}>
+                <Typography variant="caption" color="text.secondary">{user.email}</Typography>
               </MenuItem>
               {/* <MenuItem onClick={handleProfile}>Profile</MenuItem> */}
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout} sx={{color: 'primary.main'}}>Logout</MenuItem>
             </Menu>
           </>
         ) : (
