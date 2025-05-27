@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink} from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, IconButton, Avatar, Menu, MenuItem, CircularProgress} from '@mui/material';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import EventNoteIcon from '@mui/icons-material/EventNote'; // Icon for upcoming maintenances
 import { useAuth } from '../../hooks/useAuth';
 
 const Header: React.FC = () => {
@@ -51,8 +52,15 @@ const Header: React.FC = () => {
             <Button className="MuiButton-divider" color='inherit' component={RouterLink} to="/home">
               Home
             </Button>
-            {/* Add other authenticated links here, e.g., Assets */}
-            {/* <Button color="inherit" component={RouterLink} to="/assets">Assets</Button> */}
+            <Button 
+              className="MuiButton-divider" 
+              color='inherit' 
+              component={RouterLink} 
+              to="/upcoming-maintenances"
+              startIcon={<EventNoteIcon />}
+            >
+              Upcoming
+            </Button>
             <IconButton
               size="large"
               aria-label="account of current user"

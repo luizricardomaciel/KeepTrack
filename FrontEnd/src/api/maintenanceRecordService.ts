@@ -1,5 +1,5 @@
 // C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/api/maintenanceRecordService.ts
-import type { MaintenanceRecord, CreateMaintenanceRecordPayload, UpdateMaintenanceRecordPayload } from '../types/maintenanceRecordTypes';
+import type { MaintenanceRecord, CreateMaintenanceRecordPayload, UpdateMaintenanceRecordPayload, UpcomingMaintenanceRecord } from '../types/maintenanceRecordTypes';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -68,6 +68,19 @@ export async function deleteMaintenanceRecordAPI(recordId: number, token: string
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || 'Failed to delete maintenance record');
+  }
+  return response.json();
+}
+
+// Fetches upcoming maintenance records for the user's panel
+export async function fetchUpcomingMaintenancesForPanel(token: string): Promise<UpcomingMaintenanceRecord[]> {
+  const response = await fetch(`${API_BASE_URL}/maintenance-records/panel/upcoming`, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to fetch upcoming maintenances');
   }
   return response.json();
 }

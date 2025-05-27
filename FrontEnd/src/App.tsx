@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage'; // Import RegisterPage
 import HomePage from './pages/HomePage';
 import AssetDetailPage from './pages/AssetDetailPage';
+import UpcomingMaintenancesPage from './pages/UpcomingMaintenancesPage'; // Import the new page
 import { useAuth } from './hooks/useAuth';
 
 function AppContent() {
@@ -30,6 +31,7 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} /> {/* Add route for RegisterPage */}
           <Route path="/assets/:assetId" element={isAuthenticated ? <AssetDetailPage /> : <Navigate to="/login" replace />} />
+          <Route path="/upcoming-maintenances" element={isAuthenticated ? <UpcomingMaintenancesPage /> : <Navigate to="/login" replace />} /> {/* Add route for new page */}
           <Route path="*" element={
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="h4">404 - Page Not Found</Typography>

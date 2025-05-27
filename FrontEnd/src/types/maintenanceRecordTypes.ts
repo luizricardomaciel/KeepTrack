@@ -1,3 +1,4 @@
+// C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/types/maintenanceRecordTypes.ts
 // Corresponds to MaintenanceRecordResponse from backend
 export interface MaintenanceRecord {
   id: number;
@@ -35,4 +36,10 @@ export interface UpdateMaintenanceRecordPayload {
   performed_by?: string;
   next_maintenance_date?: string | null; // YYYY-MM-DD or null
   next_maintenance_notes?: string;
+}
+
+// For the upcoming maintenances panel/page
+export interface UpcomingMaintenanceRecord extends MaintenanceRecord {
+  asset_name: string;
+  // asset_id is already part of MaintenanceRecord
 }
