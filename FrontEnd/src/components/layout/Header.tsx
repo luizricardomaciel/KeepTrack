@@ -110,10 +110,12 @@ const Header: React.FC = () => {
           </>
         ) : (
           <>
-            <Button color="inherit" component={RouterLink} to="/login">
+            <Button className="MuiButton-divider" color="inherit" component={RouterLink} to="/login">
               Login
             </Button>
-            {/* <Button color="inherit" component={RouterLink} to="/register">Register</Button> */}
+            <Button className="MuiButton-divider" color="inherit" component={RouterLink} to="/register">
+              Register
+            </Button>
           </>
         )}
       </Toolbar>

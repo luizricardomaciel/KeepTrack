@@ -18,3 +18,17 @@ export interface LoginResponse {
   user: User;
   token: string;
 }
+
+// For frontend registration form
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+// Expected response from backend registration
+export interface RegisterResponse {
+  message: string;
+  user: User;
+  token: string; // Backend sends token upon successful registration
+}

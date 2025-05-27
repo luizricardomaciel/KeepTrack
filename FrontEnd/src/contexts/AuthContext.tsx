@@ -1,18 +1,19 @@
 import React, { createContext, useState, useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { User, LoginRequest } from '../types/userTypes';
-import { loginUser, fetchUserProfile } from '../api/authService';
+import type { User, LoginRequest, RegisterRequest } from '../types/userTypes';
+import { loginUser, fetchUserProfile, registerUser } from '../api/authService';
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  isLoading: boolean; // For initial auth check and login process
+  isLoading: boolean; // For initial auth check and login/register process
   error: string | null;
 }
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginRequest) => Promise<void>;
+  register: (credentials: RegisterRequest) => Promise<void>;
   logout: () => void;
 }
 
@@ -67,6 +68,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const register = async (credentials: RegisterRequest) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await registerUser(credentials);
+      // Optionally, log the user in directly after registration
+      setUser(data.user);
+      setToken(data.token);
+      setIsAuthenticated(true);
+      localStorage.setItem('token', data.token);
+      navigate('/home'); // Or navigate to '/login' and show a success message
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.error('Registration failed:', errorMessage);
+      setError(errorMessage);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -77,7 +99,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, error, login, logout }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, error, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

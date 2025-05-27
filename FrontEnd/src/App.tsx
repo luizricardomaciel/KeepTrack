@@ -4,12 +4,13 @@ import { ThemeProvider } from '@mui/material/styles'; // Added
 import { darkTheme } from './components/ThemeUi/DarckTheme'; 
 import Header from './components/layout/Header';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage'; // Import RegisterPage
 import HomePage from './pages/HomePage';
 import AssetDetailPage from './pages/AssetDetailPage';
 import { useAuth } from './hooks/useAuth';
 
 function AppContent() {
-  const { isLoading: authLoading } = useAuth();
+  const { isLoading: authLoading, isAuthenticated } = useAuth(); // Add isAuthenticated
 
   if (authLoading) {
     return (
@@ -24,10 +25,11 @@ function AppContent() {
       <Header />
       <Container component="main" sx={{ mt: 2, mb: 2, py: 2 }}>
         <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />} />
+          <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/assets/:assetId" element={<AssetDetailPage />} />
+          <Route path="/register" element={<RegisterPage />} /> {/* Add route for RegisterPage */}
+          <Route path="/assets/:assetId" element={isAuthenticated ? <AssetDetailPage /> : <Navigate to="/login" replace />} />
           <Route path="*" element={
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="h4">404 - Page Not Found</Typography>

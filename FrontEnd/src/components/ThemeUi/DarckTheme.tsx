@@ -40,13 +40,19 @@ export const darkTheme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({ // Added theme for palette access
+          // Styles for header navigation buttons
+          '&.MuiButton-divider': {
+            transition: 'color 0.3s ease-in-out, background-color 0.3s ease-in-out', // Add transition for smooth color change
+            // Base backgroundColor for color="inherit" buttons is transparent, which is fine.
+          },
           '&.MuiButton-divider:hover': {
-            color: '#BEF264', 
-            backgroundColor: 'rgba(190, 242, 100, 0)',
+            color: theme.palette.primary.main, // Use theme.palette.primary.main (e.g., '#BEF264')
+            backgroundColor: 'transparent',    // Explicitly ensure no background color on hover
           }
-        }
-      }
+          // ... other button styles if any
+        })
+      },
     },
     MuiDialog: {
         styleOverrides: {

@@ -1,8 +1,9 @@
 // C:/WorkHome/AlphaEdtech/React/KeepTrack/FrontEnd/src/pages/LoginPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom'; // Import RouterLink
 import { useAuth } from '../hooks/useAuth';
-import { Container, TextField, Button, Typography, Box, CircularProgress, Alert } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, CircularProgress, Alert} from '@mui/material'; // Import Grid
+import Grid from '@mui/material/Grid'; // Import Grid for layout
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -79,14 +80,26 @@ const LoginPage: React.FC = () => {
           >
             {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
           </Button>
-          {/* Optionally, add link to Register page */}
-          {/* <Grid container>
-            <Grid item>
-              <Link component={RouterLink} to="/register" variant="body2">
+          <Grid container justifyContent="flex-end">
+            <Grid > {/* Corrected from <Grid> to <Grid item> for semantic correctness, though not strictly necessary for this change */}
+              <Button 
+                component={RouterLink} 
+                to="/register" 
+                variant="text" 
+                size="small"
+                sx={{ 
+                  color: 'text.primary', 
+                  transition: 'color 0.3s ease-in-out', // Added transition
+                  '&:hover': {
+                    color: 'primary.main', 
+                    backgroundColor: 'transparent', 
+                  }
+                }}
+              >
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </Button>
             </Grid>
-          </Grid> */}
+          </Grid>
         </Box>
       </Box>
     </Container>
