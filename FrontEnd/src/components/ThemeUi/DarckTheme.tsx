@@ -16,7 +16,8 @@ export const darkTheme = createTheme({
       paper: '#18181B',     // Slightly lighter dark for paper elements (cards, dialogs)
     },
     text: {
-      primary: '#FAFAFA',     // White
+      primary: '#F4F4F5',     // White
+      
       secondary: '#A1A1AA',   // Light grey
       disabled: '#71717A',    // Darker grey
     },

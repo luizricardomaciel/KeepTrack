@@ -112,8 +112,8 @@ const MaintenanceRecordForm: React.FC<MaintenanceRecordFormProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{mode === 'create' ? 'Add Maintenance Record' : 'Edit Maintenance Record'}</DialogTitle>
-      <DialogContent>
+      <DialogTitle sx={{backgroundColor: "#27272A"}}>{mode === 'create' ? 'Add Maintenance Record' : 'Edit Maintenance Record'}</DialogTitle>
+      <DialogContent sx={{backgroundColor: "#27272A"}}>
         {formError && <Alert severity="warning" sx={{ mb: 2 }}>{formError}</Alert>}
         {apiError && <Alert severity="error" sx={{ mb: 2 }}>{apiError}</Alert>}
         <Grid container spacing={2} sx={{pt:1}}>
@@ -205,7 +205,7 @@ const MaintenanceRecordForm: React.FC<MaintenanceRecordFormProps> = ({
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+      <DialogActions sx={{ px: 3, pb: 2, backgroundColor: "#27272A" }}>
         <Button onClick={onClose} disabled={isSaving} color="inherit">Cancel</Button>
         <Button onClick={handleSubmit} variant="contained" disabled={isSaving}>
           {isSaving ? <CircularProgress size={24} color="inherit" /> : 'Save Record'}

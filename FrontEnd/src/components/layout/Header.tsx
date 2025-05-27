@@ -35,7 +35,7 @@ const Header: React.FC = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar sx={{ backgroundColor: '#18181B' }}>
         <IconButton
           edge="start"
           color="inherit" // Will inherit color from AppBar (typically text.primary)

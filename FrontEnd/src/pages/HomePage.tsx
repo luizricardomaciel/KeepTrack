@@ -150,7 +150,7 @@ const HomePage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ my: 4 }}>
-        <Paper elevation={3} sx={{ p: 3, mb: 3, backgroundColor: 'background.paper' /* Using theme's paper color */ }}>
+        <Paper elevation={3} sx={{ p: 3, mb: 3 /* Using theme's paper color */ }}>
           <Typography variant="h4" component="h1" gutterBottom color="text.primary">
             Welcome, {user.name}!
           </Typography>
