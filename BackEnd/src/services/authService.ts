@@ -47,13 +47,13 @@ export class AuthService {
     // Buscar usuário
     const user = await UserRepository.findByEmail(loginData.email);
     if (!user) {
-      throw new Error('Credenciais inválidas');
+      throw new Error('Invalid credentials');
     }
 
     // Verificar senha
     const isPasswordValid = await PasswordHash.compare(loginData.password, user.password_hash);
     if (!isPasswordValid) {
-      throw new Error('Credenciais inválidas');
+      throw new Error('Invalid credentials');
     }
 
     // Gerar token
