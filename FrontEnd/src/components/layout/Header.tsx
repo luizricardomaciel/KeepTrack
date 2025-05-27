@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout, isLoading } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
           <CircularProgress color="inherit" size={24} /> // Inherits AppBar's text color
         ) : isAuthenticated && user ? (
           <>
-            <Button color="inherit" component={RouterLink} to="/home">
+            <Button className="MuiButton-divider" color='inherit' component={RouterLink} to="/home">
               Home
             </Button>
             {/* Add other authenticated links here, e.g., Assets */}

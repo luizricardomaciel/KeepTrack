@@ -230,7 +230,7 @@ const AssetDetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }} color="inherit">
+      <Button component={RouterLink} to="/home" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }} color="primary" >
         Back to Assets
       </Button>
 

@@ -39,25 +39,11 @@ export const darkTheme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        containedPrimary: {
-          '&:hover': {
-            backgroundColor: '#a8d35a', // A slightly darker shade of primary for hover
+        root: {
+          '&.MuiButton-divider:hover': {
+            color: '#BEF264', 
+            backgroundColor: 'rgba(190, 242, 100, 0)',
           }
-        },
-        outlinedPrimary: {
-            borderColor: '#BEF264',
-            color: '#BEF264',
-            '&:hover': {
-                backgroundColor: 'rgba(190, 242, 100, 0.08)', // Subtle background on hover
-                borderColor: '#a8d35a',
-            }
-        },
-        // For text buttons like "Cancel" if `color="inherit"` needs adjustment
-        textInherit: {
-           color: '#A1A1AA', // Use text.secondary for cancel/neutral text buttons
-           '&:hover': {
-             backgroundColor: 'rgba(161, 161, 170, 0.08)' // Subtle hover for them
-           }
         }
       }
     },
