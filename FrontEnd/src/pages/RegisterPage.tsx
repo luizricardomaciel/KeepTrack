@@ -20,22 +20,38 @@ const RegisterPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  const validatePassword = (pass: string): boolean => {
+    if (pass.length < 6) {
+      setFormError("Password must be at least 6 characters long.");
+      return false;
+    }
+    if (!/[a-z]/.test(pass)) {
+      setFormError("Password must contain at least one lowercase letter.");
+      return false;
+    }
+    if (!/[A-Z]/.test(pass)) {
+      setFormError("Password must contain at least one uppercase letter.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setFormError(null); // Clear previous form error
 
-    if (password !== confirmPassword) {
-      setFormError("Passwords do not match.");
-      return;
-    }
     if (!name.trim() || !email.trim() || !password.trim()) {
         setFormError("All fields are required.");
         return;
     }
-    // Basic password strength check (example)
-    if (password.length < 6) {
-        setFormError("Password must be at least 6 characters long.");
+    
+    if (!validatePassword(password)) {
         return;
+    }
+
+    if (password !== confirmPassword) {
+      setFormError("Passwords do not match.");
+      return;
     }
 
     const credentials: RegisterRequest = { name, email, password };
@@ -100,6 +116,7 @@ const RegisterPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
+            helperText="Min 6 chars, 1 uppercase, 1 lowercase."
           />
           <TextField
             margin="normal"
