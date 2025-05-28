@@ -13,6 +13,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update'; // For next maintenance date
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // For cost
 import PersonIcon from '@mui/icons-material/Person'; // For performed by
+import EventIcon from '@mui/icons-material/Event'; // For service date
+import NotesIcon from '@mui/icons-material/Notes'; // For next maintenance notes
 
 
 import type { Asset } from '../types/assetTypes';
@@ -23,6 +25,8 @@ import {
 } from '../api/maintenanceRecordService';
 import MaintenanceRecordForm from '../components/MaintenanceRecordForm';
 import ConfirmDialog from '../components/common/ConfirmDialog'; // We'll create this small utility
+import { format, parse } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 // import { da } from 'date-fns/locale'; // Unused import
 
 interface AssetDetailParams extends Record<string, string | undefined> {
@@ -35,11 +39,8 @@ const formatDate = (dateString: string | null | undefined, includeTime = false, 
   
   try {
     const date = !includeUTC 
-      ? new Date(dateString + 'T00:00:00Z') 
+      ? parse(dateString, "yyyy-MM-dd", new Date()) 
       : new Date(dateString);
-
-      const isoDate = date.toISOString();
-      const isoDateWithoutTime = isoDate.split('T')[0];
 
     if (isNaN(date.getTime())) return 'Invalid Date';
 
@@ -53,15 +54,14 @@ const formatDate = (dateString: string | null | undefined, includeTime = false, 
       options.hour12 = false; 
     }
     
-    // For displaying date and time, use toLocaleString for browser's locale formatting.
-    // For just date, isoDateWithoutTime is usually fine.
     if (includeTime) {
          return date.toLocaleString('en-CA', { // en-CA gives YYYY-MM-DD HH:MM:SS format
             year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            hour: '2-digit', minute: '2-digit', hour12: false
         }).replace(',', ''); // Remove comma sometimes inserted by toLocaleString
     }
-    return isoDateWithoutTime;
+    
+    return  format(date, "MMMM dd, yyyy", { locale: enUS });
 
   } catch (e) {
     return dateString; // fallback
@@ -266,13 +266,18 @@ const AssetDetailPage: React.FC = () => {
       ) : (
         <Grid container spacing={3}>
           {maintenanceRecords.map((record) => (
-            <Grid  key={record.id}> {/* Ensure Grid item takes space */}
-              <Card elevation={2} sx={{height: '100%'}}> {/* Ensure cards take full height of grid item if desired */}
+            <Grid key={record.id}> {/* Ensure Grid item takes space, make it responsive */}
+              <Card elevation={2} sx={{height: '100%', display: 'flex', flexDirection: 'column'}}> {/* Ensure cards take full height and allow flex column for footer */}
                 <CardHeader
-                  titleTypographyProps={{color: "text.primary"}}
+                  titleTypographyProps={{color: "text.primary", variant: "h6"}}
                   subheaderTypographyProps={{color: "text.secondary"}}
                   title={record.service_type}
-                  subheader={`Service Date: ${formatDate(record.service_date)}`}
+                  subheader={
+                    <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+                        <EventIcon color="primary" sx={{ mr: 0.5 }} fontSize="inherit" />
+                        Service Date: {formatDate(record.service_date)}
+                    </Box>
+                  }
                   action={
                     <Box>
                       <Tooltip title="Edit Record">
@@ -289,38 +294,45 @@ const AssetDetailPage: React.FC = () => {
                   }
                   sx={{pb:0}}
                 />
-                <CardContent sx={{pt:1}}>
+                <CardContent sx={{pt:1, flexGrow: 1}}> {/* Allow content to grow */}
                   {record.description && (
-                    <Typography variant="body2" sx={{ mb: 1 }} color="text.primary">
-                      <strong>Description:</strong> {record.description}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1 }}>
+                      <Typography variant="body2" color="text.primary" sx={{ flexGrow: 1 }}>
+                         {record.description}
+                      </Typography>
+                    </Box>
                   )}
                   <Grid container spacing={1} sx={{color: 'text.secondary', fontSize: '0.875rem'}}>
-                    {record.cost && (
-                      <Grid  sx={{display: 'flex', alignItems: 'center'}}>
-                        <AttachMoneyIcon fontSize="inherit" sx={{mr:0.5}}/> Cost: ${record.cost}
+                    {record.cost !== null && record.cost !== undefined && (
+                      <Grid sx={{display: 'flex', alignItems: 'center'}}>
+                        <AttachMoneyIcon color="primary" fontSize="inherit" sx={{mr:0.5}}/> Cost: ${record.cost}
                       </Grid>
                     )}
                     {record.performed_by && (
-                      <Grid  sx={{display: 'flex', alignItems: 'center'}}>
-                        <PersonIcon fontSize="inherit" sx={{mr:0.5}}/> Performed by: {record.performed_by}
+                      <Grid sx={{display: 'flex', alignItems: 'center'}}>
+                        <PersonIcon color="primary" fontSize="inherit" sx={{mr:0.5}}/> Performed by: {record.performed_by}
                       </Grid>
                     )}
                     {record.next_maintenance_date && (
-                      <Grid sx={{display: 'flex', alignItems: 'center'}}> {/* Ensure full width for this item */}
-                         <UpdateIcon fontSize="inherit" sx={{mr:0.5}}/> <strong>Next Due:</strong> {formatDate(record.next_maintenance_date)}
+                      <Grid sx={{display: 'flex', alignItems: 'center'}}> 
+                         <UpdateIcon color="primary" fontSize="inherit" sx={{mr:0.5}}/> <strong>Next Due:</strong> {formatDate(record.next_maintenance_date)}
                       </Grid>
                     )}
                     {record.next_maintenance_date && record.next_maintenance_notes && (
-                       <Grid sx={{pl: {xs:0, sm:'24px !important'}, mt:0.5 }}> {/* Adjust padding for notes */}
-                           <Typography variant="caption" component="div" color="text.secondary">Notes: {record.next_maintenance_notes}</Typography>
+                       <Grid sx={{pl: {xs:0, sm:'24px !important'}, display: 'flex', alignItems: 'flex-start' }}> 
+                           <NotesIcon color="primary" fontSize="inherit" sx={{mr:0.5, mt: '2px'}}/>
+                           <Typography variant="caption" component="div" color="text.secondary" sx={{flexGrow:1}}>
+                             Notes: {record.next_maintenance_notes}
+                           </Typography>
                        </Grid>
                     )}
                   </Grid>
-                  <Typography variant="caption" display="block" color="text.disabled" sx={{mt:1, textAlign:'right'}}>
+                </CardContent>
+                <Box sx={{ p:1, textAlign:'right', mt: 'auto' }}> {/* Push to bottom */}
+                  <Typography variant="caption" display="block" color="text.disabled" >
                     Recorded: {formatDate(record.created_at, true, true)} {/* Ensure UTC used for consistency */}
                   </Typography>
-                </CardContent>
+                </Box>
               </Card>
             </Grid>
           ))}
