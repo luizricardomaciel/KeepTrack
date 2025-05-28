@@ -23,7 +23,7 @@ import NotesIcon from "@mui/icons-material/Notes"; // For notes
 
 import type { UpcomingMaintenanceRecord } from "../types/maintenanceRecordTypes";
 import { fetchUpcomingMaintenancesForPanel } from "../api/maintenanceRecordService";
-import { format, parse} from "date-fns";
+import { format, parse, } from "date-fns";
 import { enUS } from "date-fns/locale";
 
 // Helper to format date string (copied from AssetDetailPage for now)

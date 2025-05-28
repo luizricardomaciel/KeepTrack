@@ -15,7 +15,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // For cost
 import PersonIcon from '@mui/icons-material/Person'; // For performed by
 import EventIcon from '@mui/icons-material/Event'; // For service date
 import NotesIcon from '@mui/icons-material/Notes'; // For next maintenance notes
-
+import AssignmentIcon from '@mui/icons-material/Assignment'; // For description
 
 import type { Asset } from '../types/assetTypes';
 import type { MaintenanceRecord, CreateMaintenanceRecordPayload, UpdateMaintenanceRecordPayload } from '../types/maintenanceRecordTypes';
@@ -297,6 +297,10 @@ const AssetDetailPage: React.FC = () => {
                 <CardContent sx={{pt:1, flexGrow: 1}}> {/* Allow content to grow */}
                   {record.description && (
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1 }}>
+                    <AssignmentIcon
+                        sx={{ mr: 0.5, color: "text.secondary" }}
+                        fontSize="inherit"
+                      />
                       <Typography variant="body2" color="text.primary" sx={{ flexGrow: 1 }}>
                          {record.description}
                       </Typography>
@@ -320,7 +324,7 @@ const AssetDetailPage: React.FC = () => {
                     )}
                     {record.next_maintenance_date && record.next_maintenance_notes && (
                        <Grid sx={{pl: {xs:0, sm:'24px !important'}, display: 'flex', alignItems: 'flex-start' }}> 
-                           <NotesIcon color="primary" fontSize="inherit" sx={{mr:0.5, mt: '2px'}}/>
+                           <NotesIcon color="secondary" fontSize="inherit" sx={{mr:0.5, mt: '2px'}}/>
                            <Typography variant="caption" component="div" color="text.secondary" sx={{flexGrow:1}}>
                              Notes: {record.next_maintenance_notes}
                            </Typography>
