@@ -222,8 +222,8 @@ const UpcomingMaintenancesPage: React.FC = () => {
                             fontSize="inherit"
                             sx={{ mr: 0.5, color: "primary.light" }}
                           />
-                          <strong>Next Due:</strong>{" "}
-                          {formatDate(record.next_maintenance_date)}
+                          <strong>Service Date:</strong>{" "}
+                          {formatDate(record.service_date)}
                         </Grid>
                         <Grid
                           sx={{
@@ -277,7 +277,7 @@ const UpcomingMaintenancesPage: React.FC = () => {
                     display="block"
                     color="text.disabled"
                   >
-                    Last Service: {formatDate(record.service_date)}
+                    Last Service: {formatDate(record.next_maintenance_date)}
                   </Typography>
                 </Box>
               </Card>
