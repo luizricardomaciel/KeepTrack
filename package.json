@@ -1,0 +1,16 @@
+{
+  "name": "keeptrack-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack asset and maintenance management application.",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run install:all",
+    "install:all": "npm install --prefix BackEnd && npm install --prefix FrontEnd",
+    "dev": "concurrently \"npm run dev --prefix BackEnd\" \"npm run dev --prefix FrontEnd\"",
+    "build:all": "npm run build --prefix BackEnd && npm run build --prefix FrontEnd",
+    "start:prod": "concurrently \"npm start --prefix BackEnd\" \"echo 'To serve frontend in production, use a static server like serve after building. e.g., npx serve -s FrontEnd/dist'\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
