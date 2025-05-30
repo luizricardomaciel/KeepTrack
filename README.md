@@ -2,8 +2,8 @@
 
 KeepTrack é uma aplicação web full-stack projetada para ajudar usuários a gerenciar seus ativos (equipamentos) e agendar/registrar manutenções preventivas e corretivas. Ele fornece alertas para manutenções futuras ou vencidas, garantindo que os equipamentos estejam sempre em bom estado de funcionamento.
 
-![Projeto Foto](https://github.com/user-attachments/assets/7dcdb160-b5af-444b-88de-3de03f445a3a)
-*(Original project inspiration: [DesafioAlpha3](https://github.com/Alenes200/DesafioAlpha3/blob/master/README.md))*
+![Projeto Foto](https://github.com/luizricardomaciel/KeepTrack/blob/main/FrontEnd/public/Captura%20de%20tela%20de%202025-05-30%2010-36-44.png)
+*(Original project inspiration: [DesafioAlpha3](https://github.com/luizricardomaciel/KeepTrack/tree/main))*
 
 ## Funcionalidades Principais
 
