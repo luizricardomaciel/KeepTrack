@@ -24,14 +24,6 @@ KeepTrack é uma aplicação web full-stack projetada para ajudar usuários a ge
 -   **Interface Responsiva:**
     -   Construída com React e Material-UI para uma experiência de usuário agradável em desktops e dispositivos móveis, com tema escuro.
 
-## Estrutura do Projeto
-
-/KeepTrack
-├── BackEnd/ # Node.js, Express, TypeScript, PostgreSQL
-├── FrontEnd/ # React, Vite, TypeScript, Material-UI
-├── package.json # Para gerenciamento de scripts concorrentes
-└── README.md # Este arquivo
-
 
 ## Tecnologias Utilizadas
 
